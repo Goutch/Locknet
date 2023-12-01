@@ -1,7 +1,7 @@
 #include "enet/enet.h"
 
 #pragma once
-namespace LockNet {
+namespace locknet {
 
 	enum PACKET_MODE {
 		PACKET_MODE_UNRELIABLE_UNORDERED = ENET_PACKET_FLAG_UNSEQUENCED,
@@ -19,10 +19,9 @@ namespace LockNet {
 		LOCKNET_PACKET_TYPE_CUSTOM // Custom packet type
 	};
 
-
 	struct PacketInfo {
 		int channel;
-		int lenght;
+		int length;
 		const void *data;
 		PACKET_MODE mode;
 	};

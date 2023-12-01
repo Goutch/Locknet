@@ -3,9 +3,14 @@
 #include "Server.h"
 #include "stdio.h"
 
-namespace LockNet {
+namespace locknet {
 	Server::Server(const ServerInfo &info) {
 		this->info = info;
+		free_client_ids.reserve(info.max_clients);
+		for (int i = 0; i < info.max_clients; i++) {
+			free_client_ids.push_back((info.max_clients - 1) - i);
+		}
+		clients.resize(info.max_clients, nullptr);
 	}
 
 	void Server::start() {
@@ -34,42 +39,43 @@ namespace LockNet {
 		ENetEvent event;
 		i++;
 		frame_counter = std::to_string(i);
-		PacketInfo packet_info{};
-		packet_info.mode = PACKET_MODE_RELIABLE_ORDERED;
-		packet_info.channel = 0;
-		packet_info.data = static_cast<const void *>(frame_counter.c_str());
-		packet_info.lenght = frame_counter.length();
-		send(packet_info);
 
-		while (enet_host_service(enet_handle, &event, 1000) > 0) {
+
+		while (enet_host_service(enet_handle, &event, 2) > 0) {
 
 			switch (event.type) {
-				case ENET_EVENT_TYPE_CONNECT:
-					printf("Client#%i connected from  %d.%d.%d.%d:%u\n",
-						   event.peer->connectID,
+				case ENET_EVENT_TYPE_CONNECT: {
+					uint32_t id = free_client_ids.back();
+					printf("Client#%u connected from  %d.%d.%d.%d:%u\n",
+						   id,
 						   event.peer->address.host & 0xFF,
 						   (event.peer->address.host >> 8) & 0xFF,
 						   (event.peer->address.host >> 16) & 0xFF,
 						   (event.peer->address.host >> 24) & 0xFF,
-						   event.peer->address.port);
+						   (uint32_t) event.peer->address.port);
+					PacketInfo packet_info{};
+					packet_info.mode = PACKET_MODE_RELIABLE_ORDERED;
+					packet_info.channel = 0;
+					packet_info.data = &id;
+					packet_info.length = sizeof(uint32_t);
+					send(packet_info);
+					clients[id] = event.peer;
+					event.peer->data = new uint32_t(id);
+					free_client_ids.pop_back();
+					onClientConnected(id);
+				}
 					break;
 				case ENET_EVENT_TYPE_RECEIVE:
-					printf("A packet of length %u containing %s was received from Client#%i %s on channel %u.\n",
-						   event.peer->connectID,
-						   (unsigned int) event.packet->dataLength,
-						   event.packet->data,
-						   (char *) event.peer->data,
-						   event.channelID);
-
-					/* Clean up the packet now that we're done using it. */
+					onReceive(event.packet->data, *(uint32_t *) event.peer->data);
 					enet_packet_destroy(event.packet);
-
 					break;
 
 				case ENET_EVENT_TYPE_DISCONNECT:
-					printf("%s disconnected.\n", event.peer->data);
-					/* Reset the peer's client information. */
-					event.peer->data = NULL;
+					printf("Client#%i disconnected.\n", event.peer->connectID);
+					uint32_t *id_ptr = (uint32_t *) event.peer->data;
+					clients[*id_ptr] = nullptr;
+					free_client_ids.push_back(*id_ptr);
+					delete id_ptr;
 			}
 		}
 
@@ -82,7 +88,7 @@ namespace LockNet {
 
 	bool Server::send(const PacketInfo &packet_info) {
 		for (int i = 0; i < enet_handle->connectedPeers; ++i) {
-			ENetPacket *packet = enet_packet_create(packet_info.data, packet_info.lenght, packet_info.mode);
+			ENetPacket *packet = enet_packet_create(packet_info.data, packet_info.length, packet_info.mode);
 			if (enet_peer_send(&enet_handle->peers[i], packet_info.channel, packet) < 0) {
 				printf("error: failed to send packet to client[%i].\n", i);
 				enet_packet_destroy(packet);
