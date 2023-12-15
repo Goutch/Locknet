@@ -13,7 +13,7 @@ add_library(${PROJECT_NAME} SHARED
 set(ENET_LIBRARIES enet winmm ws2_32)
 
 target_link_libraries(${PROJECT_NAME} ${ENET_LIBRARIES})
-target_include_directories(${PROJECT_NAME} PUBLIC src/)
-target_include_directories(${PROJECT_NAME} PUBLIC dependencies/enet/include)
-target_include_directories(${PROJECT_NAME} PUBLIC dependencies/fpm/include)
-target_include_directories(${PROJECT_NAME} PUBLIC dependencies/utils-collection)
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/)
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/enet/include)
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/fpm/include)
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/utils-collection)
