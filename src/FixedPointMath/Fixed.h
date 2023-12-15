@@ -1,6 +1,4 @@
 #pragma once
-#undef max
-#undef min
 #include "fpm/fixed.hpp"
 #include "fpm/math.hpp"
 
@@ -338,22 +336,22 @@ namespace locknet {
 	typedef vec2fixed<fix24> vec3fix24;
 
 	template<typename T>
-	vec2fixed<T> max(vec2fixed<T> a, vec2fixed<T> b) {
+	vec2fixed<T> maxVec(vec2fixed<T> a, vec2fixed<T> b) {
 		return vec2fixed<T>(std::max(a.x, b.x), std::max(a.y, b.y));
 	}
 
 	template<typename T>
-	vec3fixed<T> max(vec3fixed<T> a, vec3fixed<T> b) {
+	vec3fixed<T> maxVec(vec3fixed<T> a, vec3fixed<T> b) {
 		return vec3fixed<T>(std::max(a.x, b.x), std::max(a.y, b.y), std::max(a.z, b.z));
 	}
 
 	template<typename T>
-	vec2fixed<T> min(vec2fixed<T> a, vec2fixed<T> b) {
+	vec2fixed<T> minVec(vec2fixed<T> a, vec2fixed<T> b) {
 		return vec2fixed<T>(std::min(a.x, b.x), std::min(a.y, b.y));
 	}
 
 	template<typename T>
-	vec3fixed<T> min(vec3fixed<T> a, vec3fixed<T> b) {
+	vec3fixed<T> minVec(vec3fixed<T> a, vec3fixed<T> b) {
 		return vec3fixed<T>(std::min(a.x, b.x), std::min(a.y, b.y), std::min(a.z, b.z));
 	}
 
