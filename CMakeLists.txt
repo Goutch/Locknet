@@ -6,10 +6,10 @@ set(CMAKE_CXX_STANDARD 17)
 add_subdirectory(dependencies/enet)
 include_directories(dependencies/enet/include)
 
-add_library(${PROJECT_NAME}
+add_library(${PROJECT_NAME} SHARED
         src/Server.cpp
         src/Client.cpp
-)
+        )
 set(ENET_LIBRARIES enet winmm ws2_32)
 
 target_link_libraries(${PROJECT_NAME} ${ENET_LIBRARIES})
