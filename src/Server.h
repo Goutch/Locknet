@@ -10,7 +10,6 @@ namespace locknet {
 		int max_channels;
 	};
 
-
 	class Server {
 		ServerInfo info;
 		ENetHost *enet_handle;
