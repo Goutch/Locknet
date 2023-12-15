@@ -3,6 +3,7 @@
 #include "enet/enet.h"
 #include "vector"
 #include "Packet.h"
+#include "LocknetCore.h"
 namespace locknet {
 	struct ServerInfo {
 		int port;
@@ -10,7 +11,7 @@ namespace locknet {
 		int max_channels;
 	};
 
-	class Server {
+	class LOCKNET_API Server {
 		ServerInfo info;
 		ENetHost *enet_handle;
 	protected:

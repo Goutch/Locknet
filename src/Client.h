@@ -4,6 +4,7 @@
 #include "enet/enet.h"
 #include "Event.h"
 #include "Packet.h"
+#include "LocknetCore.h"
 using namespace utils;
 namespace locknet {
 	struct ClientInfo {
@@ -12,7 +13,7 @@ namespace locknet {
 		std::string server_ip = "127.0.0.1";
 	};
 
-	class Client {
+	class LOCKNET_API Client {
 		ENetHost *enet_handle;
 		ENetPeer *server_handle;
 		ClientInfo info;
