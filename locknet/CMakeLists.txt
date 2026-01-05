@@ -9,10 +9,6 @@ add_compile_definitions(LOCKNET_BUILD)
 #-----------------fpm -----------------------------
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/dependencies/fpm/include)
 
-#-----------------enet -----------------------------
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/dependencies/enet)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/dependencies/enet/include)
-
 #------------Steamworks -------------------------------
 list(APPEND CMAKE_MODULE_PATH
         "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
@@ -23,14 +19,12 @@ endif ()
 #--------------------------------------------
 
 add_library(${PROJECT_NAME} SHARED
-        src/Server.cpp
         src/Client.cpp)
-set(ENET_LIBRARIES enet winmm ws2_32)
 if (STEAMWORKS_FOUND)
     target_compile_definitions(${PROJECT_NAME} PUBLIC USE_STEAMWORKS=1)
     target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/steamworks-sdk/public)
 endif ()
-target_link_libraries(${PROJECT_NAME} ${ENET_LIBRARIES} ${STEAMWORKS_LIB})
+target_link_libraries(${PROJECT_NAME} ${STEAMWORKS_LIB})
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/enet/include)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/fpm/include)

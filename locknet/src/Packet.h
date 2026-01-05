@@ -1,19 +1,19 @@
-#include "enet/enet.h"
+
 
 #pragma once
 namespace locknet {
 
-	enum PACKET_MODE {
-		PACKET_MODE_UNRELIABLE_UNORDERED = ENET_PACKET_FLAG_UNSEQUENCED,
-		PACKET_MODE_UNRELIABLE_ORDERED = 0,
-		PACKET_MODE_RELIABLE_ORDERED = ENET_PACKET_FLAG_RELIABLE,
+	enum LOCKNET_PACKET_MODE {
+		PACKET_MODE_UNRELIABLE_UNORDERED = 0,
+		PACKET_MODE_UNRELIABLE_ORDERED = 1,
+		PACKET_MODE_RELIABLE_ORDERED = 2,
 	};
 
 	struct LocknetPacket {
 		int channel;
 		int length;
 		const void *data = nullptr;
-		PACKET_MODE mode;
+		LOCKNET_PACKET_MODE mode;
 	};
 
 	enum LOCKNET_PACKET_TYPE {
@@ -23,7 +23,6 @@ namespace locknet {
 		LOCKNET_PACKET_TYPE_CLIENT_DISCONECTED, // Server send this to all clients when a client disconnected
 		LOCKNET_PACKET_TYPE_BROADCAST_REQUEST,// Client sends this to server to broadcast a packet to all other clients
 		LOCKNET_PACKET_TYPE_BROADCAST, // Server sends this to all clients when a client sends a broadcast request
-
 		LOCKNET_PACKET_TYPE_FRAME_INPUT, // Client send this to the sever when at the end of a frame
 		LOCKNET_PACKET_TYPE_FRAME_READY, // Server sends this to all clients when all clients have sent their inputs for this frame so the client can process all Inputs from all clients
 	};

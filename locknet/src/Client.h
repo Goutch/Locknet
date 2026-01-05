@@ -1,7 +1,6 @@
 #pragma once
 
 #include "string"
-#include "enet/enet.h"
 #include "Event.h"
 #include "Packet.h"
 #include "LocknetCore.h"
@@ -9,15 +8,15 @@
 
 using namespace utils;
 namespace locknet {
+	enum LOCKNET_SERVICE_TYPE {
+		SERVICE_TYPE_NONE,
+		SERVICE_TYPE_STEAM
+	};
 	struct ClientInfo {
-		int max_channels = 2;
-		int server_port = 1234;
-		std::string server_ip = "127.0.0.1";
+		LOCKNET_SERVICE_TYPE service_type = SERVICE_TYPE_NONE;
 	};
 
 	class LOCKNET_API Client {
-		ENetHost *enet_handle;
-		ENetPeer *server_handle;
 		ClientInfo info;
 		uint32_t id;
 		bool connected = false;
