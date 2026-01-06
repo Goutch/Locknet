@@ -19,7 +19,10 @@ endif ()
 #--------------------------------------------
 
 add_library(${PROJECT_NAME} SHARED
-        src/Client.cpp)
+        src/Client.cpp
+        src/platform/steam/SteamService.cpp
+        src/platform/steam/SteamService.h
+        src/platform/Service.h)
 if (STEAMWORKS_FOUND)
     target_compile_definitions(${PROJECT_NAME} PUBLIC USE_STEAMWORKS=1)
     target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/steamworks-sdk/public)
