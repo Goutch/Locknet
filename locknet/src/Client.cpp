@@ -1,14 +1,12 @@
-#include <stdexcept>
 #include "Client.h"
-//#include <steam/steam_api.h>
+
+#include "platform/Service.h"
+#include "platform/local/LocalService.h"
+#include "platform/steam/SteamService.h"
 
 namespace locknet {
     Client::Client(const ClientInfo &info) {
         this->info = info;
-
-        //if (!SteamAPI_Init()) {
-           // printf("An error occurred while initializing SteamAPI.\n");
-        //}
     }
 
 
@@ -28,6 +26,20 @@ namespace locknet {
             printf("Client is already connected\n");
             return true;
         }
+        if (service != nullptr)
+            delete service;
+        switch (info.service_type) {
+            case SERVICE_TYPE_STEAM:
+#ifdef USE_STEAMWORKS
+                service = new SteamService();
+#endif
+                break;
+            case SERVICE_TYPE_LOCAL:
+                service = new LocalService();
+                break;
+
+        }
+
 
         connected = true;
         return true;
@@ -78,7 +90,7 @@ namespace locknet {
 
     void Client::pollEvents() {
         switch (info.service_type) {
-            case SERVICE_TYPE_NONE:
+            case SERVICE_TYPE_LOCAL:
                 break;
             case SERVICE_TYPE_STEAM:
                 break;
@@ -111,7 +123,7 @@ namespace locknet {
             case SERVICE_TYPE_STEAM:
                 return false;
                 break;
-            case SERVICE_TYPE_NONE:
+            case SERVICE_TYPE_LOCAL:
                 return true;
                 break;
         }

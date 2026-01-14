@@ -2,5 +2,8 @@
 
 namespace locknet {
     class Service {
+    public:
+        Service() {
+        }
     };
 }

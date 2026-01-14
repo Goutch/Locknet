@@ -3,6 +3,8 @@
 #include "locknet/src/platform/Service.h"
 
 namespace locknet {
-    class SteamService : locknet::Service {
+    class SteamService : public Service {
+    public:
+        SteamService();
     };
 }
