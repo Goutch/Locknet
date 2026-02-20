@@ -6,8 +6,6 @@
 #include "LocknetCore.h"
 #include "vector"
 
-using namespace utils;
-
 namespace locknet {
     class Service;
 
@@ -27,11 +25,11 @@ namespace locknet {
         Service *service;
 
     public:
-        Event<uint32_t, void *> on_receive; //When server sends a custom packet to this client
-        Event<> on_connect_success; //When server accepted this client connection and assigned an id
-        Event<uint32_t> on_client_connected; //When this or any other client connect to server
-        Event<uint32_t> on_client_disonnected; //When any other client disconnect from server
-        Event<DISCONNECT_INFO> on_disconnect; //When server disconnects this client
+        HBE::Event<uint32_t, void *> on_receive; //When server sends a custom packet to this client
+        HBE::Event<> on_connect_success; //When server accepted this client connection and assigned an id
+        HBE::Event<uint32_t> on_client_connected; //When this or any other client connect to server
+        HBE::Event<uint32_t> on_client_disonnected; //When any other client disconnect from server
+        HBE::Event<DISCONNECT_INFO> on_disconnect; //When server disconnects this client
 
         void pollEvents();
 

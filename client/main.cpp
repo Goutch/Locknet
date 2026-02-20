@@ -6,7 +6,7 @@
 #include <thread>
 
 using namespace locknet;
-
+using namespace HBE;
 std::queue<std::string> inputQueue;
 std::mutex queueMutex;
 std::mutex endThreadMutex;
@@ -73,21 +73,22 @@ void on_disconnected(DISCONNECT_INFO reason) {
 }
 
 int main() {
-    printf("hello world");
-    return 0;
     std::thread inputThreadObj(inputThread);
     ClientInfo client_info{};
-    client_info.server_ip = "184.161.222.79";
-    client_info.max_channels = 4;
-    client_info.server_port = 1234;
 
     client = new Client(client_info);
 
-    client->on_receive.subscribe(on_receive);
-    client->on_client_connected.subscribe(on_client_connect);
-    client->on_disconnect.subscribe(on_disconnected);
-    client->on_connect_success.subscribe(on_connection_success);
-    client->on_client_disonnected.subscribe(on_client_disconnected);
+	event_subscription_id on_receive_event_id{};
+	event_subscription_id on_client_connected_event_id{};
+	event_subscription_id on_disconnect_event_id{};
+	event_subscription_id on_connect_event_id{};
+	event_subscription_id on_client_disonnected_event_id{};
+
+	client->on_receive.subscribe(on_receive_event_id, on_receive);
+	client->on_client_connected.subscribe(on_client_connected_event_id, on_client_connect);
+	client->on_disconnect.subscribe(on_disconnect_event_id, on_disconnected);
+	client->on_connect_success.subscribe(on_connect_event_id, on_connection_success);
+	client->on_client_disonnected.subscribe(on_client_disonnected_event_id, on_client_disconnected);
     if (!client->connect(5000)) {
         std::cout << "Failed to connect to server!" << std::endl;
         return 0;

@@ -1,3 +1,6 @@
 [submodule "dependencies/utils-collection"]
 	path = dependencies/utils-collection
 	url = https://github.com/Goutch/UtilsCollection
+[submodule "locknet/dependencies/utils-collection"]
+	path = locknet/dependencies/utils-collection
+	url = https://github.com/Goutch/UtilsCollection
