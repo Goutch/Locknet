@@ -82,13 +82,13 @@ int main() {
 	event_subscription_id on_client_connected_event_id{};
 	event_subscription_id on_disconnect_event_id{};
 	event_subscription_id on_connect_event_id{};
-	event_subscription_id on_client_disonnected_event_id{};
+	event_subscription_id on_client_disconnected_event_id{};
 
 	client->on_receive.subscribe(on_receive_event_id, on_receive);
 	client->on_client_connected.subscribe(on_client_connected_event_id, on_client_connect);
 	client->on_disconnect.subscribe(on_disconnect_event_id, on_disconnected);
 	client->on_connect_success.subscribe(on_connect_event_id, on_connection_success);
-	client->on_client_disonnected.subscribe(on_client_disonnected_event_id, on_client_disconnected);
+	client->on_client_disonnected.subscribe(on_client_disconnected_event_id, on_client_disconnected);
     if (!client->connect(5000)) {
         std::cout << "Failed to connect to server!" << std::endl;
         return 0;
